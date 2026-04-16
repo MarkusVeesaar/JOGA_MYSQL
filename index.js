@@ -33,6 +33,20 @@ app.get("/", async (req, res) => {
   res.render("index", { articles: articles });
 });
 
+// show article by this slug
+app.get('/article/:slug', (req, res) => {
+    let query = `SELECT * FROM article WHERE slug="${req.params.slug}"`
+    let article
+    con.query(query, (err, result) => {
+        if (err) throw err;
+        article = result[0]
+        console.log(article)
+        res.render('article', {
+            article: article
+        })
+    })
+});
+
 con.connect((err) => {
     if (err) throw err;
     console.log('Connected to joga mysql db')

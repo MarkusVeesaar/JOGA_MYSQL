@@ -58,6 +58,14 @@ app.get('/article/:slug', (req, res) => {
     });
 });
 
+app.get('/author/:author_id', async (req, res) => {
+    const [articles] = await con.promise().query(`SELECT * FROM article WHERE author_id="${req.params.author_id}"`)
+    const [author] = await con.promise().query(`SELECT * FROM author WHERE id="${req.params.author_id}"`)
+    const authorData = author[0];
+    authorData.articles = articles;
+    res.render("author", { author: authorData });
+});
+
 con.connect((err) => {
     if (err) throw err;
     console.log('Connected to joga mysql db')

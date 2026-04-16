@@ -1,7 +1,5 @@
 const express = require('express')
 const path = require('path')
-const mysql = require('mysql2')
-const bodyParser = require('body-parser')
 const app = express()
 
 
@@ -16,7 +14,12 @@ app.engine('hbs', hbs.engine({
     defaultLayout: 'main',
     layoutsDir: __dirname + '/views/layouts/'
 }));
+//setup static puplic directory
+app.use(express.static('public'));
 
+const mysql = require('mysql2')
+
+const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const con = mysql.createConnection({

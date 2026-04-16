@@ -2,8 +2,6 @@ const express = require('express')
 const path = require('path')
 const app = express()
 
-
-
 const hbs = require('express-handlebars');
 
 app.set('views', path.join(__dirname, 'views'));
@@ -14,6 +12,7 @@ app.engine('hbs', hbs.engine({
     defaultLayout: 'main',
     layoutsDir: __dirname + '/views/layouts/'
 }));
+
 //setup static puplic directory
 app.use(express.static('public'));
 
@@ -28,6 +27,11 @@ const con = mysql.createConnection({
     password: 'qwerty',
     database: 'joga_mysql'
 })
+
+app.get("/", async (req, res) => {
+    const [articles] = await con.promise().query("SELECT * FROM article")
+  res.render("index", { articles: articles });
+});
 
 con.connect((err) => {
     if (err) throw err;
